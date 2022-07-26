@@ -1,0 +1,58 @@
+:root .Component {
+  --icon: " ";
+}
+
+/* ----- Input field general ----- */
+
+.Component:global(.button) {
+  display:          flex;
+  flex:             0 0 auto;
+  flex-flow:        row;
+  grid-column-gap:  5px;
+  box-sizing:       border-box;
+  position:         relative;
+  padding:          4px 8px;
+  border-radius:    4px;
+  border:           1px solid black;
+  cursor:           pointer;
+  align-self:       flex-start;
+  background-color: white;
+  transition:       box-shadow 200ms ease-in-out;
+}
+
+.Component:global(.button:focus) {
+  outline: none;
+}
+
+.Component:global(.button[data-focus="true"]) {
+  border: 1px solid Highlight;
+}
+
+.Component:global(.button[data-hover="true"]) {
+  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.04) inset;
+}
+
+.Component:global(.button[data-active="true"]) {
+  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.1) inset;
+}
+
+.Component:global(.button .button-icon) {
+  display:    flex;
+  flex-flow:  column;
+  box-sizing: border-box;
+  position:   relative;
+}
+
+.Component:global(.button .button-icon::before) {
+  content: var(--icon);
+}
+
+.Component:global(.button .button-content) {
+  display:     flex;
+  flex:        1 1 auto;
+  box-sizing:  border-box;
+  position:    relative;
+  user-select: none;
+}
+
+
