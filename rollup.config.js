@@ -25,7 +25,7 @@ export default [
       {
         file:      pkg.umd,
         format:    "umd",
-        name:      pkg.name.replace(/^@noxy\//, "").split("-").map(v => v.charAt(0).toUpperCase() + v.slice(1)).join(""),
+        name:      pkg.name.replace(/^@noxy\//, ""),
         sourcemap: true,
         globals: {
           "react": "React",
