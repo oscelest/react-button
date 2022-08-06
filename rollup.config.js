@@ -27,7 +27,7 @@ export default [
         format:    "umd",
         name:      pkg.name.replace(/^@noxy\//, ""),
         sourcemap: true,
-        globals: {
+        globals:   {
           "react": "React",
         },
       },
