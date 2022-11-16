@@ -17,7 +17,6 @@
   border:           1px solid black;
   border-radius:    4px;
   transition:       box-shadow 200ms ease-in-out;
-  cursor:           pointer;
 }
 
 .Component:global(.button:focus) {
@@ -30,6 +29,7 @@
 
 .Component:global(.button[data-hover="true"][data-disabled="false"]) {
   box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.04) inset;
+  cursor:     pointer;
 }
 
 .Component:global(.button[data-active="true"][data-disabled="false"]) {
