@@ -17,6 +17,7 @@
     "noImplicitAny":                true,
     "noImplicitOverride":           true,
     "noUnusedLocals":               true,
+    "outDir":                       "dist",
     "resolveJsonModule":            true,
     "strict":                       true,
     "strictNullChecks":             true,
