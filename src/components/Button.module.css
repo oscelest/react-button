@@ -24,16 +24,21 @@
   outline: none;
 }
 
-.Component:global(.button[data-focus="true"]) {
+.Component:global(.button[data-focus="true"][data-disabled="false"]) {
   border: 1px solid Highlight;
 }
 
-.Component:global(.button[data-hover="true"]) {
+.Component:global(.button[data-hover="true"][data-disabled="false"]) {
   box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.04) inset;
 }
 
-.Component:global(.button[data-active="true"]) {
+.Component:global(.button[data-active="true"][data-disabled="false"]) {
   box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.1) inset;
+}
+
+.Component:global(.button[data-disabled="true"]) {
+  color:  dimgray;
+  border: 1px solid dimgray;
 }
 
 .Component:global(.button .button-icon) {
@@ -50,6 +55,7 @@
 .Component:global(.button .button-content) {
   display:     flex;
   flex:        1 1 auto;
+  align-items: center;
   box-sizing:  border-box;
   position:    relative;
   user-select: none;
