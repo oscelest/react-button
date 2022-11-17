@@ -1,10 +1,10 @@
 {
-  "name":             "@noxy/react-button",
-  "author":           "oscelest",
-  "version":          "0.3.0",
-  "description":      "A simple button react element.",
-  "license":          "MIT",
-  "repository":       {
+  "name": "@noxy/react-button",
+  "author": "oscelest",
+  "version": "0.3.1",
+  "description": "A simple button react element.",
+  "license": "MIT",
+  "repository": {
     "type": "git",
     "url":  "git@github.com:oscelest/react-button.git"
   },
