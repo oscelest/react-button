@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target":                           "es6",
-    "emitDeclarationOnly":              true,
     "lib":                              [
       "dom",
       "dom.iterable",
