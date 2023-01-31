@@ -1,20 +1,12 @@
 /* ----- Input field general ----- */
 
 .Component {
-  display:          flex;
-  flex:             0 0 auto;
-  flex-flow:        row;
-  align-self:       flex-start;
-  grid-column-gap:  5px;
-  box-sizing:       border-box;
-  position:         relative;
   padding:          4px 8px;
   background-color: white;
   border:           1px solid black;
   border-radius:    4px;
   transition:       box-shadow 200ms ease-in-out;
   user-select:      none;
-
 }
 
 .Component:focus {
