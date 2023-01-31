@@ -1,87 +1,100 @@
-import React, {CSSProperties, ReactNode, useState} from "react";
+import React, {DetailedHTMLProps, HTMLAttributes, useState} from "react";
 import Style from "./Button.module.css";
 
 function Button<T>(props: ButtonProps<T>) {
-  const [key_down, setKeyDown] = useState<boolean>(false);
+  const {className, value, disabled, tabIndex, children, style, ...component_method_props} = props;
+  const {onSubmit, onFocus, onBlur, onMouseEnter, onMouseLeave, onMouseDown, onMouseUp, onKeyDown, onKeyUp, ...component_props} = component_method_props;
+  
+  // State values to keep track of component state
+  const [key_down, setKeyDown] = useState<string>();
   const [mouse_down, setMouseDown] = useState<boolean>(false);
   const [hover, setHover] = useState<boolean>(false);
   const [focus, setFocus] = useState<boolean>(false);
-  const {className, value, disabled, tabIndex, children, icon, onClick, ...component_props} = props;
   
+  // Attribute resolution
+  const active = key_down || mouse_down;
+  const tab_index = !disabled ? Math.max(0, +tabIndex || 0) : undefined;
+  
+  // HTML prop initialization
   const classes = [Style.Component, "button"];
   if (className) classes.push(className);
   
-  const icon_style = icon ? {"--icon": `"${icon}"`} as CSSProperties : undefined;
-  const active = key_down || mouse_down;
-  const tab_index = !disabled ? tabIndex : undefined;
-  
   return (
     <div {...component_props} className={classes.join(" ")} tabIndex={tab_index} data-active={active} data-hover={hover} data-focus={focus} data-disabled={!!disabled}
-         onClick={onButtonClick} onMouseEnter={onButtonMouseEnter} onMouseLeave={onButtonMouseLeave} onMouseDown={onButtonMouseDown} onMouseUp={onButtonMouseUp}
-         onFocus={onButtonFocus} onBlur={onButtonBlur} onKeyDown={onButtonKeyDown} onKeyUp={onButtonKeyUp}>
-      {!!icon_style && <div className={"button-icon"} style={icon_style}></div>}
-      <div className={"button-content"}>{children}</div>
+         onMouseEnter={onComponentMouseEnter} onMouseLeave={onComponentMouseLeave} onFocus={onComponentFocus} onBlur={onComponentBlur}
+         onMouseDown={onComponentMouseDown} onMouseUp={onComponentMouseUp} onKeyDown={onComponentKeyDown} onKeyUp={onComponentKeyUp}>
+      {children}
     </div>
   );
   
-  function onButtonClick(event: React.MouseEvent<HTMLDivElement>) {
-    if (event.defaultPrevented || disabled) return;
-    onClick?.(event, value);
+  function handleEvent<E extends React.SyntheticEvent>(disabled: boolean, event: E, handler: React.EventHandler<E>) {
+    if (disabled) {
+      event.preventDefault();
+      return false;
+    }
+    
+    handler?.(event);
+    return !event.defaultPrevented;
   }
   
-  function onButtonFocus(event: React.FocusEvent<HTMLDivElement>) {
-    if (event.defaultPrevented || disabled) return;
-    setFocus(true);
+  function onComponentFocus(event: React.FocusEvent<HTMLDivElement>) {
+    if (handleEvent(disabled, event, onFocus)) {
+      setFocus(true);
+    }
   }
   
-  function onButtonBlur(event: React.FocusEvent<HTMLDivElement>) {
-    if (event.defaultPrevented || disabled) return;
-    setFocus(false);
+  function onComponentBlur(event: React.FocusEvent<HTMLDivElement>) {
+    if (handleEvent(disabled, event, onBlur)) {
+      setFocus(false);
+    }
   }
   
-  function onButtonMouseEnter(event: React.MouseEvent<HTMLDivElement>) {
-    if (event.defaultPrevented || disabled) return;
-    setHover(true);
+  function onComponentMouseEnter(event: React.MouseEvent<HTMLDivElement>) {
+    if (handleEvent(disabled, event, onMouseEnter)) {
+      setHover(true);
+    }
   }
   
-  function onButtonMouseLeave(event: React.MouseEvent<HTMLDivElement>) {
-    if (event.defaultPrevented || disabled) return;
-    setHover(false);
+  function onComponentMouseLeave(event: React.MouseEvent<HTMLDivElement>) {
+    if (handleEvent(disabled, event, onMouseLeave)) {
+      setHover(false);
+    }
   }
   
-  function onButtonMouseDown(event: React.MouseEvent<HTMLDivElement>) {
-    if (event.defaultPrevented || disabled) return;
-    setMouseDown(true);
-    props.onMouseDown?.(event);
+  function onComponentMouseDown(event: React.MouseEvent<HTMLDivElement>) {
+    if (handleEvent(disabled, event, onMouseDown) && event.button === 0) {
+      setMouseDown(true);
+    }
   }
   
-  function onButtonMouseUp(event: React.MouseEvent<HTMLDivElement>) {
-    if (event.defaultPrevented || disabled) return;
-    setMouseDown(false);
-    props.onMouseUp?.(event);
+  function onComponentMouseUp(event: React.MouseEvent<HTMLDivElement>) {
+    if (handleEvent(disabled, event, onMouseDown) && mouse_down && event.button === 0) {
+      setMouseDown(false);
+      onSubmit?.(value);
+    }
   }
   
-  function onButtonKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
-    if (event.defaultPrevented || disabled) return;
-    if (event.code === "Enter" || event.code === "NumpadEnter" || event.code === "Space") setKeyDown(true);
-    props.onKeyDown?.(event);
+  function onComponentKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (handleEvent(disabled, event, onKeyDown) && (event.code === "Enter" || event.code === "NumpadEnter" || event.code === "Space")) {
+      setKeyDown(event.code);
+    }
   }
   
-  function onButtonKeyUp(event: React.KeyboardEvent<HTMLDivElement>) {
-    if (event.defaultPrevented || disabled) return;
-    if (event.code === "Enter" || event.code === "NumpadEnter" || event.code === "Space") setKeyDown(false);
-    props.onKeyUp?.(event);
+  function onComponentKeyUp(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (!handleEvent(disabled, event, onKeyUp) && event.code === key_down) {
+      setKeyDown(undefined);
+      onSubmit?.(value);
+    }
   }
 }
 
-export interface ButtonProps<T> extends Omit<React.HTMLProps<HTMLDivElement>, "onClick" | "value"> {
+type HTMLComponentProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+
+export interface ButtonProps<T> extends Omit<HTMLComponentProps, "onSubmit" | "value"> {
   value?: T;
-  icon?: string;
   disabled?: boolean;
   
-  children?: ReactNode;
-  
-  onClick?: (event: React.MouseEvent<HTMLDivElement>, value?: T) => void;
+  onSubmit?: (value?: T) => void;
 }
 
 

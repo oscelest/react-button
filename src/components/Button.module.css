@@ -1,10 +1,6 @@
-:root .Component {
-  --icon: " ";
-}
-
 /* ----- Input field general ----- */
 
-.Component:global(.button) {
+.Component {
   display:          flex;
   flex:             0 0 auto;
   flex-flow:        row;
@@ -17,48 +13,28 @@
   border:           1px solid black;
   border-radius:    4px;
   transition:       box-shadow 200ms ease-in-out;
+  user-select:      none;
+
 }
 
-.Component:global(.button:focus) {
+.Component:focus {
   outline: none;
 }
 
-.Component:global(.button[data-focus="true"][data-disabled="false"]) {
+.Component[data-focus="true"][data-disabled="false"] {
   border: 1px solid Highlight;
 }
 
-.Component:global(.button[data-hover="true"][data-disabled="false"]) {
+.Component[data-hover="true"][data-disabled="false"] {
   box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.04) inset;
   cursor:     pointer;
 }
 
-.Component:global(.button[data-active="true"][data-disabled="false"]) {
+.Component[data-active="true"][data-disabled="false"] {
   box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.1) inset;
 }
 
-.Component:global(.button[data-disabled="true"]) {
+.Component[data-disabled="true"] {
   color:  dimgray;
   border: 1px solid dimgray;
 }
-
-.Component:global(.button .button-icon) {
-  display:    flex;
-  flex-flow:  column;
-  box-sizing: border-box;
-  position:   relative;
-}
-
-.Component:global(.button .button-icon::before) {
-  content: var(--icon);
-}
-
-.Component:global(.button .button-content) {
-  display:     flex;
-  flex:        1 1 auto;
-  align-items: center;
-  box-sizing:  border-box;
-  position:    relative;
-  user-select: none;
-}
-
-
