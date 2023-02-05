@@ -2,7 +2,7 @@ import React, {DetailedHTMLProps, HTMLAttributes, useState} from "react";
 import Style from "./Button.module.css";
 
 function Button<T>(props: ButtonProps<T>) {
-  const {className, value, disabled, tabIndex, children, style, ...component_method_props} = props;
+  const {className, value, disabled = false, tabIndex, children, style, ...component_method_props} = props;
   const {onSubmit, onFocus, onBlur, onMouseEnter, onMouseLeave, onMouseDown, onMouseUp, onKeyDown, onKeyUp, ...component_props} = component_method_props;
   
   // State values to keep track of component state
@@ -13,21 +13,21 @@ function Button<T>(props: ButtonProps<T>) {
   
   // Attribute resolution
   const active = key_down || mouse_down;
-  const tab_index = !disabled ? Math.max(0, +tabIndex || 0) : undefined;
+  const tab_index = !disabled ? Math.max(0, +(tabIndex ?? 0)) : undefined;
   
   // HTML prop initialization
   const classes = [Style.Component, "button"];
   if (className) classes.push(className);
   
   return (
-    <div {...component_props} className={classes.join(" ")} tabIndex={tab_index} data-active={active} data-hover={hover} data-focus={focus} data-disabled={!!disabled}
+    <div {...component_props} className={classes.join(" ")} tabIndex={tab_index} data-active={active} data-hover={hover} data-focus={focus} data-disabled={disabled}
          onMouseEnter={onComponentMouseEnter} onMouseLeave={onComponentMouseLeave} onFocus={onComponentFocus} onBlur={onComponentBlur}
          onMouseDown={onComponentMouseDown} onMouseUp={onComponentMouseUp} onKeyDown={onComponentKeyDown} onKeyUp={onComponentKeyUp}>
       {children}
     </div>
   );
   
-  function handleEvent<E extends React.SyntheticEvent>(disabled: boolean, event: E, handler: React.EventHandler<E>) {
+  function handleEvent<E extends React.SyntheticEvent>(disabled: boolean, event: E, handler?: React.EventHandler<E>) {
     if (disabled) {
       event.preventDefault();
       return false;
