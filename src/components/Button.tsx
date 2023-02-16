@@ -6,13 +6,13 @@ export function Button<T>(props: ButtonProps<T>) {
   const {onSubmit, onFocus, onBlur, onMouseEnter, onMouseLeave, onMouseDown, onMouseUp, onKeyDown, onKeyUp, ...component_props} = component_method_props;
   
   // State values to keep track of component state
-  const [key_down, setKeyDown] = useState<string>();
-  const [mouse_down, setMouseDown] = useState<boolean>(false);
+  const [stateKeyDown, setKeyDown] = useState<string>();
+  const [stateMouseDown, setMouseDown] = useState<boolean>(false);
   const [hover, setHover] = useState<boolean>(false);
   const [focus, setFocus] = useState<boolean>(false);
   
   // Attribute resolution
-  const active = key_down || mouse_down;
+  const active = stateKeyDown || stateMouseDown;
   const tab_index = !disabled ? Math.max(0, +(tabIndex ?? 0)) : undefined;
   
   // HTML prop initialization
@@ -68,7 +68,7 @@ export function Button<T>(props: ButtonProps<T>) {
   }
   
   function onComponentMouseUp(event: React.MouseEvent<HTMLDivElement>) {
-    if (handleEvent(disabled, event, onMouseDown) && mouse_down && event.button === 0) {
+    if (handleEvent(disabled, event, onMouseDown) && stateMouseDown && event.button === 0) {
       setMouseDown(false);
       onSubmit?.(value);
     }
@@ -81,7 +81,7 @@ export function Button<T>(props: ButtonProps<T>) {
   }
   
   function onComponentKeyUp(event: React.KeyboardEvent<HTMLDivElement>) {
-    if (!handleEvent(disabled, event, onKeyUp) && event.code === key_down) {
+    if (handleEvent(disabled, event, onKeyUp) && event.code === stateKeyDown) {
       setKeyDown(undefined);
       onSubmit?.(value);
     }
