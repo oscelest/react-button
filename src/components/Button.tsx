@@ -1,4 +1,4 @@
-import React, {DetailedHTMLProps, HTMLAttributes, useState} from "react";
+import React, {DetailedHTMLProps, HTMLAttributes, useRef, useState} from "react";
 import Style from "./Button.module.css";
 
 export function Button<T>(props: ButtonProps<T>) {
@@ -8,8 +8,16 @@ export function Button<T>(props: ButtonProps<T>) {
   // State values to keep track of component state
   const [stateKeyDown, setKeyDown] = useState<string>();
   const [stateMouseDown, setMouseDown] = useState<boolean>(false);
+  const [stateElement, setElement] = useState<HTMLElement>();
   const [hover, setHover] = useState<boolean>(false);
   const [focus, setFocus] = useState<boolean>(false);
+  
+  // Value ref
+  const refElement = useRef<HTMLElement>();
+  refElement.current = stateElement;
+  
+  const refMouseDown = useRef<boolean>(stateMouseDown);
+  refMouseDown.current = stateMouseDown;
   
   // Attribute resolution
   const active = stateKeyDown || stateMouseDown;
@@ -64,15 +72,17 @@ export function Button<T>(props: ButtonProps<T>) {
   function onComponentMouseDown(event: React.MouseEvent<HTMLDivElement>) {
     if (handleEvent(disabled, event, onMouseDown) && event.button === 0) {
       setMouseDown(true);
+      setElement(event.currentTarget);
       window.addEventListener("mouseup", onWindowMouseUp);
     }
   }
   
   function onWindowMouseUp(event: MouseEvent) {
-    if (stateMouseDown && event.button === 0) {
+    if (refMouseDown.current && refElement.current === event.target && event.button === 0) {
       onSubmit?.(value, event);
     }
     setMouseDown(false);
+    window.removeEventListener("mouseup", onWindowMouseUp);
   }
   
   function onComponentKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
