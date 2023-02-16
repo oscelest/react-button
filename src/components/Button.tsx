@@ -70,7 +70,7 @@ export function Button<T>(props: ButtonProps<T>) {
   function onComponentMouseUp(event: React.MouseEvent<HTMLDivElement>) {
     if (handleEvent(disabled, event, onMouseDown) && stateMouseDown && event.button === 0) {
       setMouseDown(false);
-      onSubmit?.(value);
+      onSubmit?.(value, event);
     }
   }
   
@@ -83,7 +83,7 @@ export function Button<T>(props: ButtonProps<T>) {
   function onComponentKeyUp(event: React.KeyboardEvent<HTMLDivElement>) {
     if (handleEvent(disabled, event, onKeyUp) && event.code === stateKeyDown) {
       setKeyDown(undefined);
-      onSubmit?.(value);
+      onSubmit?.(value, event);
     }
   }
 }
@@ -94,5 +94,5 @@ export interface ButtonProps<T> extends Omit<HTMLComponentProps, "onSubmit" | "v
   value?: T;
   disabled?: boolean;
   
-  onSubmit?: (value?: T) => void;
+  onSubmit?: (value: T | undefined, event: React.SyntheticEvent<HTMLDivElement>) => void;
 }
