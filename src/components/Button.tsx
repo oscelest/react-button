@@ -1,7 +1,7 @@
 import React, {DetailedHTMLProps, HTMLAttributes, useState} from "react";
 import Style from "./Button.module.css";
 
-function Button<T>(props: ButtonProps<T>) {
+export function Button<T>(props: ButtonProps<T>) {
   const {className, value, disabled = false, tabIndex, children, style, ...component_method_props} = props;
   const {onSubmit, onFocus, onBlur, onMouseEnter, onMouseLeave, onMouseDown, onMouseUp, onKeyDown, onKeyUp, ...component_props} = component_method_props;
   
@@ -96,6 +96,3 @@ export interface ButtonProps<T> extends Omit<HTMLComponentProps, "onSubmit" | "v
   
   onSubmit?: (value?: T) => void;
 }
-
-
-export default Button;
