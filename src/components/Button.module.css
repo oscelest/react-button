@@ -7,6 +7,8 @@
   border-radius:    4px;
   transition:       box-shadow 200ms ease-in-out;
   user-select:      none;
+  position:         relative;
+  box-shadow:       0 0 0 0 transparent inset;
 }
 
 .Component:focus {
@@ -17,13 +19,21 @@
   border: 1px solid Highlight;
 }
 
+.Component[data-focus="true"][data-disabled="false"]::before {
+  content:    " ";
+  position:   absolute;
+  inset:      0;
+  box-shadow: 0 0 2px 0 Highlight;
+  z-index:    -1;
+}
+
 .Component[data-hover="true"][data-disabled="false"] {
-  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.04) inset;
+  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.01) inset;
   cursor:     pointer;
 }
 
 .Component[data-active="true"][data-disabled="false"] {
-  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.1) inset;
+  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.04) inset;
 }
 
 .Component[data-disabled="true"] {
