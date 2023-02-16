@@ -11,29 +11,43 @@
   box-shadow:       0 0 0 0 transparent inset;
 }
 
+.Component :global(> *) {
+  position: relative;
+  z-index:  0;
+}
+
 .Component:focus {
   outline: none;
 }
 
-.Component[data-focus="true"][data-disabled="false"] {
-  border: 1px solid Highlight;
+.Component[data-disabled="false"]:hover {
+  cursor: pointer;
 }
 
-.Component[data-focus="true"][data-disabled="false"]::before {
-  content:    " ";
-  position:   absolute;
-  inset:      0;
-  box-shadow: 0 0 2px 0 Highlight;
-  z-index:    -1;
+.Component::before,
+.Component::after {
+  content:  " ";
+  position: absolute;
+  inset:    0;
+  z-index:  -1;
 }
 
-.Component[data-hover="true"][data-disabled="false"] {
-  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.01) inset;
-  cursor:     pointer;
+.Component::before {
+  z-index:          0;
+  background-color: transparent;
+  transition:       background-color 200ms ease-in-out;
 }
 
-.Component[data-active="true"][data-disabled="false"] {
-  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.04) inset;
+.Component[data-focus="true"][data-disabled="false"]::after {
+  box-shadow: 0 0 3px 0 Highlight;
+}
+
+.Component[data-hover="true"][data-disabled="false"]::before {
+  background-color: rgba(0, 0, 0, 0.01);
+}
+
+.Component[data-hover="true"][data-active="true"][data-disabled="false"] {
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
 .Component[data-disabled="true"] {

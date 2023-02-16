@@ -3,7 +3,7 @@ import Style from "./Button.module.css";
 
 export function Button<T>(props: ButtonProps<T>) {
   const {className, value, disabled = false, tabIndex, children, style, ...component_method_props} = props;
-  const {onSubmit, onFocus, onBlur, onMouseEnter, onMouseLeave, onMouseDown, onMouseUp, onKeyDown, onKeyUp, ...component_props} = component_method_props;
+  const {onSubmit, onFocus, onBlur, onKeyDown, onKeyUp, onMouseEnter, onMouseLeave, onMouseDown, ...component_props} = component_method_props;
   
   // State values to keep track of component state
   const [stateKeyDown, setKeyDown] = useState<string>();
@@ -21,8 +21,8 @@ export function Button<T>(props: ButtonProps<T>) {
   
   return (
     <div {...component_props} className={classes.join(" ")} tabIndex={tab_index} data-active={active} data-hover={hover} data-focus={focus} data-disabled={disabled}
-         onMouseEnter={onComponentMouseEnter} onMouseLeave={onComponentMouseLeave} onFocus={onComponentFocus} onBlur={onComponentBlur}
-         onMouseDown={onComponentMouseDown} onMouseUp={onComponentMouseUp} onKeyDown={onComponentKeyDown} onKeyUp={onComponentKeyUp}>
+         onFocus={onComponentFocus} onBlur={onComponentBlur} onKeyDown={onComponentKeyDown} onKeyUp={onComponentKeyUp}
+         onMouseEnter={onComponentMouseEnter} onMouseLeave={onComponentMouseLeave} onMouseDown={onComponentMouseDown}>
       {children}
     </div>
   );
@@ -64,14 +64,15 @@ export function Button<T>(props: ButtonProps<T>) {
   function onComponentMouseDown(event: React.MouseEvent<HTMLDivElement>) {
     if (handleEvent(disabled, event, onMouseDown) && event.button === 0) {
       setMouseDown(true);
+      window.addEventListener("mouseup", onWindowMouseUp);
     }
   }
   
-  function onComponentMouseUp(event: React.MouseEvent<HTMLDivElement>) {
-    if (handleEvent(disabled, event, onMouseDown) && stateMouseDown && event.button === 0) {
-      setMouseDown(false);
+  function onWindowMouseUp(event: MouseEvent) {
+    if (stateMouseDown && event.button === 0) {
       onSubmit?.(value, event);
     }
+    setMouseDown(false);
   }
   
   function onComponentKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
@@ -94,5 +95,5 @@ export interface ButtonProps<T> extends Omit<HTMLComponentProps, "onSubmit" | "v
   value?: T;
   disabled?: boolean;
   
-  onSubmit?: (value: T | undefined, event: React.SyntheticEvent<HTMLDivElement>) => void;
+  onSubmit?: (value: T | undefined, event: MouseEvent | React.SyntheticEvent) => void;
 }
