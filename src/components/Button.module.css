@@ -46,7 +46,7 @@
   background-color: rgba(0, 0, 0, 0.01);
 }
 
-.Component[data-hover="true"][data-active="true"][data-disabled="false"] {
+.Component[data-hover="true"][data-active="true"][data-disabled="false"]::before {
   background-color: rgba(0, 0, 0, 0.04);
 }
 
