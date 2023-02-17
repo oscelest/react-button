@@ -8,13 +8,12 @@ export function Button<T>(props: ButtonProps<T>) {
   // State values to keep track of component state
   const [stateKeyDown, setKeyDown] = useState<string>();
   const [stateMouseDown, setMouseDown] = useState<boolean>(false);
-  const [stateElement, setElement] = useState<HTMLElement>();
-  const [hover, setHover] = useState<boolean>(false);
-  const [focus, setFocus] = useState<boolean>(false);
+  const [stateHover, setHover] = useState<boolean>(false);
+  const [stateFocus, setFocus] = useState<boolean>(false);
   
   // Value ref
-  const refElement = useRef<HTMLElement>();
-  refElement.current = stateElement;
+  const refHover = useRef<boolean>(stateHover);
+  refHover.current = stateHover;
   
   const refMouseDown = useRef<boolean>(stateMouseDown);
   refMouseDown.current = stateMouseDown;
@@ -28,7 +27,7 @@ export function Button<T>(props: ButtonProps<T>) {
   if (className) classes.push(className);
   
   return (
-    <div {...component_props} className={classes.join(" ")} tabIndex={tab_index} data-active={active} data-hover={hover} data-focus={focus} data-disabled={disabled}
+    <div {...component_props} className={classes.join(" ")} tabIndex={tab_index} data-active={active} data-hover={stateHover} data-focus={stateFocus} data-disabled={disabled}
          onFocus={onComponentFocus} onBlur={onComponentBlur} onKeyDown={onComponentKeyDown} onKeyUp={onComponentKeyUp}
          onMouseEnter={onComponentMouseEnter} onMouseLeave={onComponentMouseLeave} onMouseDown={onComponentMouseDown}>
       {children}
@@ -72,13 +71,12 @@ export function Button<T>(props: ButtonProps<T>) {
   function onComponentMouseDown(event: React.MouseEvent<HTMLDivElement>) {
     if (handleEvent(disabled, event, onMouseDown) && event.button === 0) {
       setMouseDown(true);
-      setElement(event.currentTarget);
       window.addEventListener("mouseup", onWindowMouseUp);
     }
   }
   
   function onWindowMouseUp(event: MouseEvent) {
-    if (refMouseDown.current && refElement.current === event.target && event.button === 0) {
+    if (refMouseDown.current && refHover.current && event.button === 0) {
       onSubmit?.(value, event);
     }
     setMouseDown(false);
