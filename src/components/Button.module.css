@@ -8,6 +8,7 @@
   user-select:      none;
   position:         relative;
   box-shadow:       0 0 0 0 transparent inset;
+  text-align:       center;
 }
 
 .Component :global(> *) {
