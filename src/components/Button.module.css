@@ -1,14 +1,14 @@
 /* ----- Input field general ----- */
 
 .Component {
+  position:         relative;
   padding:          4px 8px;
-  background-color: white;
   border:           1px solid black;
   border-radius:    4px;
-  user-select:      none;
-  position:         relative;
   box-shadow:       0 0 0 0 transparent inset;
+  background-color: white;
   text-align:       center;
+  user-select:      none;
 }
 
 .Component :global(> *) {
@@ -33,8 +33,8 @@
 
 .Component::after {
   z-index:    -1;
-  transition: box-shadow 200ms ease-in-out;
   box-shadow: 0 0 3px 0 transparent;
+  transition: box-shadow 200ms ease-in-out;
 }
 
 .Component::before {
@@ -56,6 +56,6 @@
 }
 
 .Component[data-disabled="true"] {
-  color:  dimgray;
   border: 1px solid dimgray;
+  color:  dimgray;
 }
