@@ -5,7 +5,7 @@ import Style from "./Button.module.css";
 export function Button<T>(props: ButtonProps<T>) {
   const {className, value, disabled = false, tabIndex, children, style, ...component_method_props} = props;
   const {onSubmit, onFocus, onBlur, onKeyDown, onKeyUp, onMouseEnter, onMouseLeave, onMouseDown, ...component_props} = component_method_props;
-  const classes = sanitizeClassName([Style.Component, "button", className]);
+  const classes = sanitizeClassName(Style.Component, "button", className);
   
   // State values to keep track of component state
   const [stateKeyDown, setKeyDown] = useState<string>();
