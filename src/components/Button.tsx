@@ -1,9 +1,11 @@
-import React, {DetailedHTMLProps, HTMLAttributes, useRef, useState} from "react";
+import {HTMLComponentProps, sanitizeClassName} from "@noxy/react-utils";
+import React, {useRef, useState} from "react";
 import Style from "./Button.module.css";
 
 export function Button<T>(props: ButtonProps<T>) {
   const {className, value, disabled = false, tabIndex, children, style, ...component_method_props} = props;
   const {onSubmit, onFocus, onBlur, onKeyDown, onKeyUp, onMouseEnter, onMouseLeave, onMouseDown, ...component_props} = component_method_props;
+  const classes = sanitizeClassName([Style.Component, "button", className]);
   
   // State values to keep track of component state
   const [stateKeyDown, setKeyDown] = useState<string>();
@@ -22,12 +24,8 @@ export function Button<T>(props: ButtonProps<T>) {
   const active = stateKeyDown || stateMouseDown;
   const tab_index = !disabled ? Math.max(0, +(tabIndex ?? 0)) : undefined;
   
-  // HTML prop initialization
-  const classes = [Style.Component, "button"];
-  if (className) classes.push(className);
-  
   return (
-    <div {...component_props} className={classes.join(" ")} tabIndex={tab_index} data-active={active} data-hover={stateHover} data-focus={stateFocus} data-disabled={disabled}
+    <div {...component_props} className={classes} tabIndex={tab_index} data-active={active} data-hover={stateHover} data-focus={stateFocus} data-disabled={disabled}
          onFocus={onComponentFocus} onBlur={onComponentBlur} onKeyDown={onComponentKeyDown} onKeyUp={onComponentKeyUp}
          onMouseEnter={onComponentMouseEnter} onMouseLeave={onComponentMouseLeave} onMouseDown={onComponentMouseDown}>
       {children}
@@ -96,8 +94,6 @@ export function Button<T>(props: ButtonProps<T>) {
     }
   }
 }
-
-type HTMLComponentProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 
 export interface ButtonProps<T> extends Omit<HTMLComponentProps, "onSubmit" | "value"> {
   value?: T;
