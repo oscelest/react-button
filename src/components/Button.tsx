@@ -75,7 +75,7 @@ export function Button<T>(props: ButtonProps<T>) {
   
   function onWindowMouseUp(event: MouseEvent) {
     if (refMouseDown.current && refHover.current && event.button === 0) {
-      onSubmit?.(value, event);
+      onSubmit?.(value as any);
     }
     setMouseDown(false);
     window.removeEventListener("mouseup", onWindowMouseUp);
@@ -90,14 +90,23 @@ export function Button<T>(props: ButtonProps<T>) {
   function onComponentKeyUp(event: React.KeyboardEvent<HTMLDivElement>) {
     if (handleEvent(disabled, event, onKeyUp) && event.code === stateKeyDown) {
       setKeyDown(undefined);
-      onSubmit?.(value, event);
+      onSubmit?.(value as any);
     }
   }
 }
 
-export interface ButtonProps<T> extends Omit<HTMLComponentProps, "onSubmit" | "value"> {
-  value?: T;
+export type ButtonProps<T> = DefaultButtonProps & (ButtonUndefinedValueProps | ButtonDefinedValueProps<T>)
+
+interface ButtonUndefinedValueProps {
+  value?: undefined;
+  onSubmit?: (value: undefined) => void;
+}
+
+interface ButtonDefinedValueProps<T> {
+  value: T;
+  onSubmit?: (value: T) => void;
+}
+
+interface DefaultButtonProps extends Omit<HTMLComponentProps, "value" | "onSubmit"> {
   disabled?: boolean;
-  
-  onSubmit?: (value: T | undefined, event: MouseEvent | React.SyntheticEvent) => void;
 }

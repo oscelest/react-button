@@ -11,7 +11,7 @@ function IndexPage() {
     </div>
   );
   
-  function onSubmit(value: any) {
+  function onSubmit(value: string) {
     console.log(value);
   }
 }
